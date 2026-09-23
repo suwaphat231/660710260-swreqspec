@@ -64,3 +64,21 @@
 - สิ่งที่เกือบต้องเดา: รูปแบบและวิธีออกหมายเลขคิวตาม Q-02 ยังไม่มีคำตอบ จึงคง `queue_no` เป็น nullable และไม่สร้าง logic การออกเลข
 
 ---
+
+## [2569-09-23] คำสั่ง: /implement T-13 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้างหรือแก้: `backend/app/config.py`, `backend/app/main.py`, `frontend/vite.config.js`
+- ผลลัพธ์: กำหนด TLS ขั้นต่ำ `TLSv1.2`, บังคับ backend ใช้ HTTPS และให้ Vite อ่าน certificate/key กับ API URL จาก environment
+- ผล test: backend TLS config ผ่าน และ `npm run build` ผ่าน
+- สิ่งที่เกือบต้องเดา: ไม่ได้สร้าง certificate/key หรือกำหนดค่า secret เอง ใช้ค่าจาก deployment environment ตามข้อกำหนด TLS ของ spec
+
+---
+
+## [2569-09-23] คำสั่ง: /implement T-04 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้างหรือแก้: `frontend/src/pages/SlotPicker.jsx`, `frontend/src/App.jsx`, `frontend/src/__tests__/SlotPicker.test.jsx`
+- ผลลัพธ์: สร้างหน้าจอเลือกแพ็กเกจและช่วงเวลา แสดงวันที่ เวลา และจำนวนที่นั่งคงเหลือจาก API จำลอง และโหลดข้อมูลใหม่เมื่อเปลี่ยนแพ็กเกจ
+- ผล test: `npm test -- --run src/__tests__/SlotPicker.test.jsx` ผ่าน `2 tests`; `npm run build` ผ่าน
+- สิ่งที่เกือบต้องเดา: ใช้ API จำลองตาม plan.md และไม่เชื่อม API จริงหรือเพิ่มรูปแบบข้อมูลนอกสัญญา
+
+---
