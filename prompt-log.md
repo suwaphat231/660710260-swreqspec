@@ -55,3 +55,12 @@
 - ยังไม่เริ่มทำ task ใด ๆ ตามคำสั่งของทีม
 
 ---
+
+## [2569-09-23] คำสั่ง: /implement T-01 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้างหรือแก้: `backend/app/db/models.py`, `backend/app/db/session.py`, `backend/app/db/migrations/001_init.py`, `backend/tests/conftest.py`
+- ผลลัพธ์: สร้าง model และ migration สำหรับ `slots`, `bookings`, `audit_logs`; ตาราง `bookings` เก็บ HN และไม่มี `national_id` ตาม IF-HIS-01
+- ผล test: `pytest --doctest-modules tests/conftest.py -q` ผ่าน `1 passed`
+- สิ่งที่เกือบต้องเดา: รูปแบบและวิธีออกหมายเลขคิวตาม Q-02 ยังไม่มีคำตอบ จึงคง `queue_no` เป็น nullable และไม่สร้าง logic การออกเลข
+
+---
