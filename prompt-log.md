@@ -66,3 +66,38 @@
 - รูปแบบหมายเลขคิวของ `TC-BKG-01-1` เนื่องจากยังรอ `Q-02`
 
 - ยังไม่เขียนหรือรันโค้ด test ตามโหมดร่าง
+
+---
+
+## 2569-10-07 15.22 คำสั่ง: /testcases AC-BKG-01 specs/001-booking/
+
+- เครื่องมือ: Copilot ใน VS Code
+- ไฟล์ test: backend/tests/test_AC_BKG_01.py
+- โหมด: เขียน test จากแถวสถานะ "ใช้ได้"
+- TC ID ที่เขียน: `TC-BKG-01-1`, `TC-BKG-01-2`, `TC-BKG-01-3`
+- จำนวน test เดิมในไฟล์: 1
+- จำนวน test หลังแก้: 4
+- ผล test ทั้งหลังบ้าน: 6 passed, 1 failed
+- ผลรายเคส:
+  - `TC-BKG-01-1` ผ่าน
+  - `TC-BKG-01-2` ไม่ผ่าน: เมื่อที่นั่งเหลือ 0 ระบบตอบ `201` แทน `409` และยังสร้างรายการจอง
+  - `TC-BKG-01-3` ผ่าน
+- การวิเคราะห์: เป็นกรณีโค้ดระบบทำไม่ตรง AC/FR-BKG-03 จึงไม่แก้ test และไม่แก้โค้ดระบบตามกติกา
+
+---
+
+## 2569-10-07 15.31 คำสั่ง: /verify specs/001-booking/
+
+- เครื่องมือ: Copilot ใน VS Code
+- ผล test: backend 6 ผ่าน 1 ไม่ผ่าน; frontend 1 ผ่าน 0 ไม่ผ่าน
+- ตาราง RTM: ครบ 1, ยังไม่ถึง 8, รอ 0, ช่องโหว่ 6
+- F-ID ข้อค้นพบใหม่: F-01 ถึง F-13
+- ไม่แก้โค้ด, test, spec, plan หรือ tasks ตามกติกา `/verify`; แก้เฉพาะ `specs/001-booking/rtm.md` และเพิ่มบันทึกนี้
+
+---
+
+## 2569-10-07 15.37 คำสั่ง: แก้ F-02 จากผล `/verify`
+
+- แก้ไฟล์: `backend/app/booking/router.py`, `backend/app/booking/service.py`
+- ลบ endpoint `DELETE /bookings/{id}` และฟังก์ชัน `cancel_booking` เพราะ UC-02 (ยกเลิก/เลื่อนคิว) อยู่ใน Out of scope
+- อัปเดต `specs/001-booking/rtm.md` ย้าย F-02 ไปหัวข้อ "แก้แล้ว"
