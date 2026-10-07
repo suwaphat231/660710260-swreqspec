@@ -101,3 +101,13 @@
 - แก้ไฟล์: `backend/app/booking/router.py`, `backend/app/booking/service.py`
 - ลบ endpoint `DELETE /bookings/{id}` และฟังก์ชัน `cancel_booking` เพราะ UC-02 (ยกเลิก/เลื่อนคิว) อยู่ใน Out of scope
 - อัปเดต `specs/001-booking/rtm.md` ย้าย F-02 ไปหัวข้อ "แก้แล้ว"
+
+---
+
+## 2569-10-07 15.53 คำสั่ง: /verify specs/001-booking/
+
+- ผล test: backend 6 ผ่าน 1 ไม่ผ่าน; frontend 3 ผ่าน 0 ไม่ผ่าน
+- ตาราง RTM: ครบ 1, ยังไม่ถึง 8, รอ 0, ช่องโหว่ 6
+- F-02 ยังไม่แก้ครบ: backend ลบ endpoint แล้ว แต่ `frontend/src/pages/ConfirmBooking.jsx` ยังมีฟังก์ชันและปุ่มยกเลิกการจอง ซึ่งอยู่ใน Out of scope UC-02
+- ข้อค้นพบเพิ่มเติม: F-14 จำกัดตัวเลือกช่วงเวลาเหลือ 2 รายการ, F-15 ใช้ข้อความ "เต็มแล้ว" ไม่ตรงกับ AC
+- ไม่แก้โค้ดหรือ test ตามกติกา `/verify`; อัปเดตเฉพาะ `specs/001-booking/rtm.md` และเพิ่มบันทึกนี้

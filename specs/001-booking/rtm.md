@@ -1,6 +1,6 @@
 # RTM: จองคิวตรวจสุขภาพ (Booking)
 อ้างอิง: spec.md Draft v2 | tasks.md | test-cases.md
-สร้างด้วย /verify เมื่อ 2569-10-07 15:31 | test: 6 ผ่าน 1 ไม่ผ่าน (backend), 1 ผ่าน 0 ไม่ผ่าน (frontend)
+สร้างด้วย /verify เมื่อ 2569-10-07 15:53 | test: 6 ผ่าน 1 ไม่ผ่าน (backend), 3 ผ่าน 0 ไม่ผ่าน (frontend)
 
 ## 1. ตามรอยไปข้างหน้า (requirement ไป โค้ด ไป test)
 | ID | AC | task | โค้ด (ไฟล์: ฟังก์ชัน) | test (ผล) | สถานะ |
@@ -10,7 +10,7 @@
 | FR-BKG-03 | AC-BKG-03 | T-05 พร้อมทำ, T-11/T-12 พร้อมทำ | ยังไม่มีโค้ดเสนอช่วงใกล้เคียงหรือหน้าจอยืนยัน | ไม่มี test | ยังไม่ถึง |
 | FR-BKG-04 | AC-BKG-01 | T-03 เสร็จ, T-06 รอ Q-02 | `backend/app/booking/router.py:create_booking`, `backend/app/booking/service.py:create_booking` | `test_AC_BKG_01` ผ่านแบบอ่อน; `test_TC_BKG_01_1` ผ่าน; `test_TC_BKG_01_2` ไม่ผ่าน; `test_TC_BKG_01_3` ผ่าน; ไม่ตรวจการส่งข้อความ | ช่องโหว่ |
 | FR-BKG-05 | AC-BKG-04 | T-07 พร้อมทำ | ยังไม่มีโค้ดคิวแจ้งเตือน/ส่งซ้ำ | ไม่มี test | ยังไม่ถึง |
-| FR-BKG-06 | ไม่มี AC | T-02 เสร็จ, T-10/T-12 พร้อมทำ | `backend/app/slots/service.py:list_available_slots` กรอง `package_code` | ไม่มี test ตรวจเปลี่ยนแพ็กเกจ | ช่องโหว่ |
+| FR-BKG-06 | ไม่มี AC | T-02 เสร็จ, T-10 เสร็จ รอทีมตรวจ, T-12 พร้อมทำ | `backend/app/slots/service.py:list_available_slots`, `frontend/src/pages/SlotPicker.jsx:SlotPicker` | `FR-BKG-06 เปลี่ยนแพ็กเกจแล้วโหลดช่วงเวลาใหม่` ผ่าน แต่ไม่มี AC ใน spec | ช่องโหว่ |
 | NFR-PERF-01 | AC-BKG-05 | T-02 เสร็จ | `backend/app/slots/router.py:get_slots` | `test_AC_BKG_05` ผ่าน แต่เรียกแบบวนซ้ำ ไม่ใช่ผู้ใช้พร้อมกัน 200 คนจริง | ช่องโหว่ |
 | NFR-SEC-01 | ไม่มี AC | ไม่มี task ที่เสร็จ | ไม่พบการบังคับ TLS ใน `backend/app` | ไม่มี test | ช่องโหว่ |
 | NFR-REL-02 | AC-BKG-04 | T-07 พร้อมทำ | ยังไม่มีโค้ด retry | ไม่มี test | ยังไม่ถึง |
@@ -28,12 +28,13 @@
 | `backend/app/slots/service.py:list_available_slots` | FR-BKG-01, FR-BKG-06 | ไม่ตรงทั้งหมด | `DAYS_AHEAD = 14` ขัดกับ 30 วันใน FR-BKG-01 |
 | `backend/app/booking/router.py:create_booking` | FR-BKG-04, IF-IDP-01 | ไม่ตรงทั้งหมด | ตรวจ identity และสร้างการจอง แต่ยังไม่มีการส่งข้อความ และกรณีที่นั่ง 0 ไม่ถูกปฏิเสธ |
 | `backend/app/booking/service.py:create_booking` | FR-BKG-04, Q-02 | ไม่ตรงกับ Q-02 | ออกหมายเลข `A001` เองทั้งที่ Q-02 ยังเปิดอยู่ เป็นการเดาคำตอบจากตัวอย่าง |
-| `backend/app/booking/service.py:cancel_booking` | UC-02 | แก้แล้ว | ลบฟังก์ชันยกเลิกและ endpoint `DELETE /bookings/{id}` ออกแล้ว เพราะ UC-02 อยู่ใน Out of scope |
+| `frontend/src/pages/ConfirmBooking.jsx:cancel` | UC-02 | ไม่ตรงกับ scope | ยังมีฟังก์ชันและปุ่มยกเลิกการจอง แม้ backend endpoint ถูกลบแล้ว |
 | `backend/app/booking/router.py:BookingRequest` | IF-HIS-01 | ไม่ตรง | รับ `national_id` ใน request และ logger เขียนค่า `national_id` ทั้งที่ flow ตาม spec ให้ค้นผ่าน HIS และอ้างอิงภายในด้วย HN |
 | `backend/app/auth/idp.py:get_verified_hn` | IF-IDP-01 | ตรงบางส่วน | ป้องกัน endpoint จองเมื่อไม่มี token แต่เป็น mock prefix ไม่ใช่การรับผลจากระบบยืนยันตัวตนจริง |
 | `backend/app/config.py:DATABASE_URL` | CON-TECH-01 | ไม่ตรงค่าเริ่มต้น | ค่า default เป็น SQLite ขณะที่ constraint ระบุ PostgreSQL |
 | `backend/app/db/models.py:AuditLog` | DOM-PDPA-01 | ยังไม่ครบ | มีโครงตาราง แต่ไม่มีโค้ดบันทึกทุกการเข้าถึงหรือ retention 1 ปี |
 | `frontend/src/api/client.js:api.createBooking` | FR-BKG-04 | ยังไม่ครบ | มี client POST แต่ไม่มีหน้าจอ BookingResult และไม่มีการแสดงเลขคิว |
+| `frontend/src/pages/ConfirmBooking.jsx:ConfirmBooking` | FR-BKG-03, UC-02 | ไม่ตรงทั้งหมด | แสดงข้อความ "เต็มแล้ว" และแสดงทางเลือกสูงสุด 2 รายการแทนข้อความ/3 ตัวเลือกตาม spec; ยังมีปุ่มยกเลิกนอก scope |
 | `backend/tests/test_AC_BKG_05.py:test_AC_BKG_05` | NFR-PERF-01 | อ่อน | วัด 200 requests แบบลำดับ ไม่ใช่ concurrent users ตามข้อความ requirement |
 
 ## 3. ข้อค้นพบ
@@ -42,7 +43,7 @@
 | F-ID | ชนิด | อยู่ที่ | ขัดกับ | รายละเอียด | ทีมตัดสิน |
 |---|---|---|---|---|---|
 | F-01 | ละเมิด Constraint | `backend/app/booking/router.py:BookingRequest`, `create_booking` | IF-HIS-01 | รับ `national_id` ใน booking request และเขียนลง log แม้ spec กำหนดให้ค้นผ่าน HIS และอ้างอิงภายในด้วย HN; ยังไม่มี endpoint HIS lookup | |
-| F-02 | ของแถม / อยู่ใน Out of scope | `backend/app/booking/router.py:cancel_booking`, `backend/app/booking/service.py:cancel_booking` | Out of scope UC-02 | เพิ่ม endpoint ยกเลิกและคืนที่นั่ง ทั้งที่การยกเลิก/เลื่อนคิวอยู่นอก scope | แก้แล้ว |
+| F-02 | ของแถม / อยู่ใน Out of scope | `frontend/src/pages/ConfirmBooking.jsx:cancel` | Out of scope UC-02 | backend endpoint ถูกลบแล้ว แต่หน้าจอยังมีปุ่มและฟังก์ชันยกเลิกการจอง | |
 | F-03 | เดา Q-xx | `backend/app/booking/service.py:next_queue_no` | Q-02 | ใช้รูปแบบ `A001` และรีเซ็ตรายวันทั้งที่ Q-02 ยังไม่มีคำตอบ | |
 | F-04 | ตัวเลขไม่ตรง spec | `backend/app/slots/service.py:DAYS_AHEAD` | FR-BKG-01 | ใช้ 14 วันแทน 30 วัน | |
 | F-05 | ช่องโหว่ / test อ่อน | `backend/app/booking/service.py:create_booking`, `test_TC_BKG_01_2_full_slot` | FR-BKG-03, AC-BKG-01 | เงื่อนไขตรวจเต็มใช้ `< 0` ทำให้ remaining = 0 ยังจองได้; test ล้มเหลวด้วย 201 แทน 409 | |
@@ -54,8 +55,10 @@
 | F-11 | โค้ดไม่มี FR | `backend/app` | FR-BKG-05, NFR-REL-02, IF-NOT-01 | ไม่พบการบันทึก notification, asynchronous queue หรือ retry ภายใน 5 นาที | |
 | F-12 | ละเมิด Constraint | `backend/app/config.py` | CON-TECH-01 | default runtime ใช้ SQLite ไม่ใช่ PostgreSQL และ test ไม่ได้ยืนยัน PostgreSQL | |
 | F-13 | โค้ดไม่มี FR | `backend/app` | DOM-PDPA-01 | มีเพียงตาราง `audit_logs` ไม่มี middleware/การบันทึกทุก request และ retention ไม่น้อยกว่า 1 ปี | |
+| F-14 | ตัวเลขไม่ตรง spec / test อ่อน | `frontend/src/pages/ConfirmBooking.jsx:ConfirmBooking` | FR-BKG-03, AC-BKG-03 | จำกัดทางเลือกด้วย `.slice(0, 2)` จึงแสดงได้สูงสุด 2 รายการ ทั้งที่ spec กำหนด 3 ตัวเลือก และ test ตรวจเพียงมีตัวเลือกมากกว่า 0 | |
+| F-15 | ข้อความไม่ตรง spec | `frontend/src/pages/ConfirmBooking.jsx:ConfirmBooking` | FR-BKG-03, AC-BKG-03 | UI แสดง "เต็มแล้ว" แทนข้อความ "ช่วงเวลาเต็ม" ที่ระบุใน AC | |
 
 ## 4. แก้แล้ว
 | F-ID | แก้อย่างไร | รู้ได้อย่างไร |
 |---|---|---|
-| F-02 | ลบ `DELETE /bookings/{id}` จาก `backend/app/booking/router.py` และลบ `cancel_booking` จาก `backend/app/booking/service.py` | ค้นทั้งโค้ดแล้วไม่พบ endpoint หรือฟังก์ชันดังกล่าว และรัน test หลังบ้านผ่าน |
+| ไม่มี | ยังไม่มีข้อค้นพบที่แก้ครบทั้งระบบในรอบนี้ | backend endpoint ถูกลบแล้ว แต่ยังพบฟังก์ชันยกเลิกใน frontend จึงคง F-02 ไว้ |
